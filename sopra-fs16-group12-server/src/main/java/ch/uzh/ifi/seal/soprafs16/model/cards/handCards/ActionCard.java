@@ -1,6 +1,9 @@
 
 package ch.uzh.ifi.seal.soprafs16.model.cards.handCards;
 
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
+import ch.uzh.ifi.seal.soprafs16.model.User;
+import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -62,4 +65,7 @@ public abstract class ActionCard extends HandCard implements Serializable {
     public void setPos(int pos) {
         this.pos = pos;
     }
+
+    @JsonIgnore
+    public abstract ActionRequestDTO createActionRequest(GameDTO game, User user);
 }

@@ -51,6 +51,7 @@ import ch.uzh.ifi.seal.soprafs16.service.GameCacherService;
 import ch.uzh.ifi.seal.soprafs16.service.GameLogicService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -73,21 +74,8 @@ public class ActionServiceControllerTest {
     private ItemRepository itemRepo;
     @Autowired
     private MarshalRepository marshalRepo;
-    @Autowired
-    private CharacterRepository characterRepo;
-    @Autowired
-    private CardRepository cardRepo;
-    @Autowired
-    private DeckRepository deckRepo;
-    @Autowired
-    private TurnRepository turnRepo;
-    @Autowired
-    private GameLogicService gls;
 
     private Long gameId;
-
-    @Autowired
-    private GameCacherService gameCacherService;
 
     @Value("${local.server.port}")
     private int port;
@@ -502,16 +490,14 @@ public class ActionServiceControllerTest {
         CollectCard clc = new CollectCard();
 
         //games/{gameId}/action - GET
-        ActionRequestDTO test = gls.createActionRequest(clc, gameId, user1.getId());
-        if (test instanceof CollectItemRequestDTO) {
-            CollectItemRequestDTO crq = (CollectItemRequestDTO) test;
-            assertEquals(1, game.getActions().size());
-            assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(0).getItemType().equals(ItemType.BAG), crq.getHasBag());
-            assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(1).getItemType().equals(ItemType.CASE), crq.getHasCase());
-            assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(2).getItemType().equals(ItemType.GEM), crq.getHasGem());
-        }
+        ActionRequestDTO test = clc.createActionRequest(game, user1);
 
+        assertTrue(test instanceof CollectItemRequestDTO);
+        CollectItemRequestDTO crq = (CollectItemRequestDTO) test;
 
+        assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(0).getItemType().equals(ItemType.BAG), crq.getHasBag());
+        assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(1).getItemType().equals(ItemType.CASE), crq.getHasCase());
+        assertEquals(game.getWagons().get(2).getBottomLevel().getItems().get(2).getItemType().equals(ItemType.GEM), crq.getHasGem());
     }
 
     @Test
@@ -521,12 +507,10 @@ public class ActionServiceControllerTest {
 
         ShootCard sc = new ShootCard();
 
-        ActionRequestDTO test = gls.createActionRequest(sc, gameId, user1.getId());
-        if (test instanceof ShootRequestDTO) {
-            ShootRequestDTO srq = (ShootRequestDTO) test;
-            assertEquals(2, srq.getShootableUserIds().size());
-        }
-
+        ActionRequestDTO test = sc.createActionRequest(game, user1);
+        assertTrue(test instanceof ShootRequestDTO);
+        ShootRequestDTO srq = (ShootRequestDTO) test;
+        assertEquals(2, srq.getShootableUserIds().size());
     }
 
     @Test
@@ -536,14 +520,10 @@ public class ActionServiceControllerTest {
 
         ShootCard sc = new ShootCard();
 
-        ActionRequestDTO test = gls.createActionRequest(sc, gameId, user1.getId());
-        if (test instanceof ShootRequestDTO) {
-            ShootRequestDTO srq = (ShootRequestDTO) test;
-            assertEquals(2, srq.getShootableUserIds().size());
-            ;
-        }
-
-
+        ActionRequestDTO test = sc.createActionRequest(game, user1);
+        assertTrue(test instanceof ShootRequestDTO);
+        ShootRequestDTO srq = (ShootRequestDTO) test;
+        assertEquals(2, srq.getShootableUserIds().size());
     }
 
     @Test
@@ -553,11 +533,10 @@ public class ActionServiceControllerTest {
 
         ShootCard sc = new ShootCard();
 
-        ActionRequestDTO test = gls.createActionRequest(sc, gameId, user1.getId());
-        if (test instanceof ShootRequestDTO) {
-            ShootRequestDTO srq = (ShootRequestDTO) test;
-            assertEquals(5, srq.getShootableUserIds().size());
-        }
+        ActionRequestDTO test = sc.createActionRequest(game, user1);
+        assertTrue(test instanceof ShootRequestDTO);
+        ShootRequestDTO srq = (ShootRequestDTO) test;
+        assertEquals(5, srq.getShootableUserIds().size());
     }
 
     @Test
@@ -567,11 +546,10 @@ public class ActionServiceControllerTest {
 
         ShootCard sc = new ShootCard();
 
-        ActionRequestDTO test = gls.createActionRequest(sc, gameId, user1.getId());
-        if (test instanceof ShootRequestDTO) {
-            ShootRequestDTO srq = (ShootRequestDTO) test;
-            assertEquals(3, srq.getShootableUserIds().size());
-        }
+        ActionRequestDTO test = sc.createActionRequest(game, user1);
+        assertTrue(test instanceof ShootRequestDTO);
+        ShootRequestDTO srq = (ShootRequestDTO) test;
+        assertEquals(3, srq.getShootableUserIds().size());
     }
 
     @Test
@@ -581,12 +559,10 @@ public class ActionServiceControllerTest {
 
         MoveCard mc = new MoveCard();
 
-        ActionRequestDTO test = gls.createActionRequest(mc, gameId, user1.getId());
-        if (test instanceof MoveRequestDTO) {
-            MoveRequestDTO mrq = (MoveRequestDTO) test;
-            assertEquals(3, mrq.getMovableWagonsLvlIds().size());
-        }
-
+        ActionRequestDTO test = mc.createActionRequest(game, user1);
+        assertTrue(test instanceof MoveRequestDTO);
+        MoveRequestDTO mrq = (MoveRequestDTO) test;
+        assertEquals(3, mrq.getMovableWagonsLvlIds().size());
     }
 
     @Test
@@ -596,12 +572,10 @@ public class ActionServiceControllerTest {
 
         MoveCard mc = new MoveCard();
 
-        ActionRequestDTO test = gls.createActionRequest(mc, gameId, user1.getId());
-        if (test instanceof MoveRequestDTO) {
-            MoveRequestDTO mrq = (MoveRequestDTO) test;
-            assertEquals(2, mrq.getMovableWagonsLvlIds().size());
-        }
-
+        ActionRequestDTO test = mc.createActionRequest(game, user1);
+        assertTrue(test instanceof MoveRequestDTO);
+        MoveRequestDTO mrq = (MoveRequestDTO) test;
+        assertEquals(2, mrq.getMovableWagonsLvlIds().size());
     }
 
     @Test
@@ -611,12 +585,10 @@ public class ActionServiceControllerTest {
 
         PunchCard pc = new PunchCard();
 
-        ActionRequestDTO test = gls.createActionRequest(pc, gameId, user1.getId());
-        if (test instanceof PunchRequestDTO) {
-            PunchRequestDTO prq = (PunchRequestDTO) test;
-            assertEquals(1, prq.getPunchableUserIds().size());
-        }
-
+        ActionRequestDTO test = pc.createActionRequest(game, user1);
+        assertTrue(test instanceof PunchRequestDTO);
+        PunchRequestDTO prq = (PunchRequestDTO) test;
+        assertEquals(1, prq.getPunchableUserIds().size());
     }
 
     @Test
@@ -627,27 +599,22 @@ public class ActionServiceControllerTest {
         PunchCard pc = new PunchCard();
 
 
-        ActionRequestDTO test = gls.createActionRequest(pc, gameId, user1.getId());
-        if (test instanceof PunchRequestDTO) {
-            PunchRequestDTO prq = (PunchRequestDTO) test;
-            assertEquals(1, prq.getPunchableUserIds().size());
-        }
-
+        ActionRequestDTO test = pc.createActionRequest(game, user1);
+        assertTrue(test instanceof PunchRequestDTO);
+        PunchRequestDTO prq = (PunchRequestDTO) test;
+        assertEquals(1, prq.getPunchableUserIds().size());
     }
 
     @Test
     public void processRequest_MarshalIsCorrect() {
         GameDTO game = gameRepo.findOne(gameId);
-        Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
+        User user1 = userRepo.findOne(game.getUsers().get(7).getId());
 
         MarshalCard mc = new MarshalCard();
-        ActionRequestDTO test = gls.createActionRequest(mc, gameId, marshal.getId());
-        if (test instanceof MoveMarshalRequestDTO) {
-            MoveMarshalRequestDTO mmrq = (MoveMarshalRequestDTO) test;
-            assertEquals(1, mmrq.getMovableWagonsLvlIds().size());
-        }
+        ActionRequestDTO test = mc.createActionRequest(game, user1);
+        assertTrue(test instanceof MoveMarshalRequestDTO);
+        MoveMarshalRequestDTO mmrq = (MoveMarshalRequestDTO) test;
+        assertEquals(1, mmrq.getMovableWagonsLvlIds().size());
     }
-
-
 }
 
