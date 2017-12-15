@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.uzh.ifi.seal.soprafs16.SerializedGameWrapper;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.repositories.GameRepository;
 
 /**
@@ -25,17 +25,17 @@ public class GameCacherService {
 
     Logger logger = LoggerFactory.getLogger(GameCacherService.class);
 
-    //  private static Map<Long, Game> cachedGamesMap = new HashMap<>();
+    //  private static Map<Long, GameDTO> cachedGamesMap = new HashMap<>();
     private static Map<Long, SerializedGameWrapper> cachedSerializedGamesMap = new HashMap<>();
 
-    public void saveGame(Game game) {
+    public void saveGame(GameDTO game) {
         Long gameId = game.getId();
-        Game repoGame = gameRepo.findOne(gameId);
+        GameDTO repoGame = gameRepo.findOne(gameId);
         //initializeLazyLoading(repoGame);
         serializeGame(repoGame);
     }
 
-//    private void initializeLazyLoading(Game repoGame) {
+//    private void initializeLazyLoading(GameDTO repoGame) {
 //        Hibernate.initialize(repoGame.getUsers());
 //        if (repoGame.getUsers() != null) {
 //            for (User u : repoGame.getUsers()) {
@@ -70,7 +70,7 @@ public class GameCacherService {
 //        }
 //    }
 
-    public void deleteGame(Game game) {
+    public void deleteGame(GameDTO game) {
         System.out.println("GameCacherService: delete game");
         cachedSerializedGamesMap.remove(game.getId());
     }
@@ -120,7 +120,7 @@ public class GameCacherService {
         return serializedList;
     }
 
-    private void serializeGame(Game game) {
+    private void serializeGame(GameDTO game) {
         String gameSerialized = null;
         try {
             gameSerialized = new ObjectMapper().writeValueAsString(game);

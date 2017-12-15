@@ -24,7 +24,7 @@ public class Wagon implements Serializable {
 
     @ManyToOne
     @JsonIgnore
-    private Game game;
+    private GameDTO game;
 
     @OneToOne
     private WagonLevel topLevel;
@@ -40,11 +40,11 @@ public class Wagon implements Serializable {
         this.id = id;
     }
 
-    public Game getGame() {
+    public GameDTO getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameDTO game) {
         this.game = game;
     }
 

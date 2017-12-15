@@ -10,7 +10,7 @@ import java.util.List;
 
 import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.Item;
 import ch.uzh.ifi.seal.soprafs16.model.Marshal;
 import ch.uzh.ifi.seal.soprafs16.model.User;
@@ -82,7 +82,7 @@ public class ActionResponseService {
 
     public boolean processResponse(DrawCardResponseDTO dcr) {
         User user = userRepo.findOne(dcr.getUserId());
-        Game game = gameRepo.findOne(dcr.getSpielId());
+        GameDTO game = gameRepo.findOne(dcr.getSpielId());
         PlayerDeck<HandCard> hiddenDeck = (PlayerDeck<HandCard>) deckRepo.findOne(user.getHiddenDeck().getId());
         PlayerDeck<HandCard> handDeck = (PlayerDeck<HandCard>) deckRepo.findOne(user.getHandDeck().getId());
         if(hiddenDeck.size() > 0) {
@@ -105,7 +105,7 @@ public class ActionResponseService {
     }
 
     public void processResponse(PlayCardResponseDTO pcr) {
-        Game game = gameRepo.findOne(pcr.getSpielId());
+        GameDTO game = gameRepo.findOne(pcr.getSpielId());
         User user = userRepo.findOne(pcr.getUserId());
 
         ActionCard ac = (ActionCard) cardRepo.findOne(pcr.getPlayedCardId());
@@ -169,7 +169,7 @@ public class ActionResponseService {
 
     public void processResponse(PunchResponseDTO pr) {
         User user = userRepo.findOne(pr.getUserId());
-        Game game = gameRepo.findOne(pr.getSpielId());
+        GameDTO game = gameRepo.findOne(pr.getSpielId());
 
         User victim = userRepo.findOne(pr.getVictimId());
         WagonLevel moveWl = wagonLevelRepo.findOne(pr.getWagonLevelId());
@@ -257,7 +257,7 @@ public class ActionResponseService {
     }
 
     public void processResponse(MoveMarshalResponseDTO mmr) {
-        Game game = gameRepo.findOne(mmr.getSpielId());
+        GameDTO game = gameRepo.findOne(mmr.getSpielId());
 
         Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
         WagonLevel wl = wagonLevelRepo.findOne(marshal.getWagonLevel().getId());
@@ -336,7 +336,7 @@ public class ActionResponseService {
         return null;
     }
 
-    public void checkMarshal(Game game) {
+    public void checkMarshal(GameDTO game) {
         // If users are in the same wagonLevel as the marshal
         WagonLevel marshalWl = wagonLevelRepo.findOne(game.getMarshal().getWagonLevel().getId());
         if (!marshalWl.getUsers().isEmpty()) {

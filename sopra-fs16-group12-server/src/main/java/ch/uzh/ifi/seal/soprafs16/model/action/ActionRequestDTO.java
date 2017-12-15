@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs16.model.action;
 
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -10,7 +11,6 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-import ch.uzh.ifi.seal.soprafs16.model.Game;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.CollectItemRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.DrawOrPlayCardRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.MoveMarshalRequestDTO;
@@ -38,13 +38,13 @@ public class ActionRequestDTO extends ActionDTO implements Serializable {
 
     @ManyToOne
     @JsonIgnore
-    private Game game;
+    private GameDTO game;
 
-    public Game getGame() {
+    public GameDTO getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameDTO game) {
         this.game = game;
     }
 

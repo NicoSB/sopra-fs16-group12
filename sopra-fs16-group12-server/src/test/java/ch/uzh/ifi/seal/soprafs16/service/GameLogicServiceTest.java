@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs16.service;
 
+import ch.uzh.ifi.seal.soprafs16.model.*;
 import org.hibernate.Hibernate;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,18 +21,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import ch.uzh.ifi.seal.soprafs16.Application;
 import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
 import ch.uzh.ifi.seal.soprafs16.constant.PhaseType;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
-import ch.uzh.ifi.seal.soprafs16.model.Item;
-import ch.uzh.ifi.seal.soprafs16.model.Marshal;
-import ch.uzh.ifi.seal.soprafs16.model.User;
-import ch.uzh.ifi.seal.soprafs16.model.UserAuthenticationWrapper;
-import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.PlayCardResponseDTO;
 import ch.uzh.ifi.seal.soprafs16.model.cards.GameDeck;
 import ch.uzh.ifi.seal.soprafs16.model.cards.PlayerDeck;
@@ -112,7 +107,7 @@ public class GameLogicServiceTest {
     @Autowired
     private GameCacherService  gameCacherService;
 
-    private Game tester;
+    private GameDTO tester;
     private Long gameId;
     @Value("${local.server.port}")
     private int port;
@@ -149,7 +144,7 @@ public class GameLogicServiceTest {
         user4.setUsername("username4_glServiceTest" + i);
         UserAuthenticationWrapper userAuthenticationWrapper4 = template.postForObject(base + "users", user4, UserAuthenticationWrapper.class);
 
-        tester = new Game();
+        tester = new GameDTO();
         tester.setName("game1_2_glServiceTest" + i);
         Long gameId1_2 = template.postForObject(base + "games?token=" + userAuthenticationWrapper1.getUserToken(), tester, Long.class);
         Long userIdGameJoined2 = template.postForObject(base + "games/" + gameId1_2 + "/users?token=" + userAuthenticationWrapper2.getUserToken(), null, Long.class);
@@ -174,7 +169,7 @@ public class GameLogicServiceTest {
         HttpEntity<User> userResponse4 = template.exchange(builder4.build().encode().toUri(), HttpMethod.PUT, characterRequest4, User.class);
 
         template.postForObject(base + "games/" + gameId1_2 + "/start?token=" + userAuthenticationWrapper1.getUserToken(), null, Void.class);
-        Game testerResponse = template.getForObject(base + "games/" + gameId1_2, Game.class);
+        GameDTO testerResponse = template.getForObject(base + "games/" + gameId1_2, GameDTO.class);
         gameId = testerResponse.getId();
 
         tester = gameRepo.findOne(gameId);
@@ -311,7 +306,7 @@ public class GameLogicServiceTest {
             tester = gameRepo.findOne(gameId);
             simulatePlayCardResponse();
 
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(game.getCommonDeck().getId());
 
             while(!commonDeck.getCards().isEmpty()){
@@ -403,7 +398,7 @@ public class GameLogicServiceTest {
             simulatePlayCardResponse();
             // P4 response
             // Simulate responses
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(game.getCommonDeck().getId());
 
             while(!commonDeck.getCards().isEmpty()){
@@ -438,7 +433,7 @@ public class GameLogicServiceTest {
             simulatePlayCardResponse();
         }
 
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(game.getCommonDeck().getId());
 
         while(!commonDeck.getCards().isEmpty()){
@@ -454,7 +449,7 @@ public class GameLogicServiceTest {
     @Test
     public void execute_AngryMarshalGivesBullet() {
         User u = userRepo.findOne(tester.getUsers().get(0).getId());
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
         for (int i = 0; i < 5; i++) {
@@ -511,7 +506,7 @@ public class GameLogicServiceTest {
     @Test
     public void execute_BrakingCardMovesUsersOnRoof() {
         User u = userRepo.findOne(tester.getUsers().get(0).getId());
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
 
@@ -568,7 +563,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void execute_GetItAllCaseIsPlaced() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
@@ -624,7 +619,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void execute_HostageCardUsersInLocGetBag() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
@@ -693,7 +688,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void execute_MarshalsRevengeCardUserLosesLeastBag() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
@@ -750,7 +745,7 @@ public class GameLogicServiceTest {
 
    @Test
     public void execute_PassengerRebellionBanditsInsideGetBulletCard() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
@@ -811,7 +806,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void execute_PickPocketingGrantsLoneBanditPurse() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
@@ -885,7 +880,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void execute_PivotablePoleMovesBanditsOnTopToCaboose() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         GameDeck<RoundCard> roundCardDeck = game.getRoundCardDeck();
         roundCardDeck.getCards().clear();
@@ -943,7 +938,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void checkMarshal_movesPlayerOnTop() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User u = userRepo.findOne(game.getUsers().get(0).getId());
 
         WagonLevel wl = u.getWagonLevel();
@@ -973,7 +968,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void changeLevel_works() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User u = userRepo.findOne(game.getUsers().get(0).getId());
 
         Long wlId = u.getWagonLevel().getId();
@@ -992,7 +987,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void evaluateGunslingerBonus_assignsIfOnlyOneMax(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         game.setCurrentRound(4);
         game.setCurrentPhase(PhaseType.EXECUTION);
 
@@ -1010,7 +1005,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void evaluateGunslingerBonus_doesNotAssignIfNotMax(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         game.setCurrentRound(4);
         game.setCurrentPhase(PhaseType.EXECUTION);
 
@@ -1029,7 +1024,7 @@ public class GameLogicServiceTest {
 
     @Test
     public void evaluateGunslingerBonus_doesAssignMultipleBonuses(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         game.setCurrentRound(4);
         game.setCurrentPhase(PhaseType.EXECUTION);
 
@@ -1063,13 +1058,13 @@ public class GameLogicServiceTest {
         return false;
     }
 
-    private void simulateRound(Game game) {
+    private void simulateRound(GameDTO game) {
         for (int i = 0; i < 4; i++) {
             simulateTurn(game);
         }
     }
 
-    private void simulateTurn(Game game) {
+    private void simulateTurn(GameDTO game) {
         for (int i = 0; i < game.getUsers().size(); i++) {
             gls.update(game.getId());
         }

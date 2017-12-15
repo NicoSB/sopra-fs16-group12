@@ -23,7 +23,7 @@ public class Marshal implements Serializable {
 
     @OneToOne
     @JsonIgnore
-    private Game game;
+    private GameDTO game;
 
     @OneToOne
     @JsonIgnore
@@ -38,12 +38,12 @@ public class Marshal implements Serializable {
     }
 
     @JsonIgnore
-    public Game getGame() {
+    public GameDTO getGame() {
         return game;
     }
 
     @JsonIgnore
-    public void setGame(Game game) {
+    public void setGame(GameDTO game) {
         this.game = game;
     }
 

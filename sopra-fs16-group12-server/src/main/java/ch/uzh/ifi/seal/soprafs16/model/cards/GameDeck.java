@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs16.model.cards;
 
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
@@ -7,8 +8,6 @@ import java.util.ArrayList;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-
-import ch.uzh.ifi.seal.soprafs16.model.Game;
 
 @Entity
 public class GameDeck<T extends Card>  extends Deck implements Serializable {
@@ -20,17 +19,17 @@ public class GameDeck<T extends Card>  extends Deck implements Serializable {
 
     @OneToOne
     @JsonIgnore
-    private Game game;
+    private GameDTO game;
 
     public GameDeck(){
         this.setCards(new ArrayList<T>());
     }
 
-    public Game getGame() {
+    public GameDTO getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameDTO game) {
         this.game = game;
     }
 }

@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs16.service;
 
+import ch.uzh.ifi.seal.soprafs16.model.*;
 import org.hibernate.Hibernate;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +22,7 @@ import java.net.URL;
 
 import ch.uzh.ifi.seal.soprafs16.Application;
 import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
-import ch.uzh.ifi.seal.soprafs16.model.Marshal;
-import ch.uzh.ifi.seal.soprafs16.model.User;
-import ch.uzh.ifi.seal.soprafs16.model.UserAuthenticationWrapper;
-import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.CollectItemResponseDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.DrawCardResponseDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.MoveMarshalResponseDTO;
@@ -90,7 +87,7 @@ public class ActionResponseServiceTest {
     @Autowired
     private ActionResponseService ars;
 
-    private Game tester;
+    private GameDTO tester;
     private Long gameId;
 
     @Value("${local.server.port}")
@@ -120,7 +117,7 @@ public class ActionResponseServiceTest {
         user2.setUsername("username9_startGameTest" + i);
         UserAuthenticationWrapper userAuthenticationWrapper2 = template.postForObject(base + "users", user2, UserAuthenticationWrapper.class);
 
-        tester = new Game();
+        tester = new GameDTO();
         tester.setName("game1_2_startGameTest" + i);
         Long gameId1_2 = template.postForObject(base + "games?token=" + userAuthenticationWrapper1.getUserToken(), tester, Long.class);
         Long userIdGameJoined9 = template.postForObject(base + "games/" + gameId1_2 + "/users?token=" + userAuthenticationWrapper2.getUserToken(), null, Long.class);
@@ -137,13 +134,13 @@ public class ActionResponseServiceTest {
 
 
         template.postForObject(base + "games/" + gameId1_2 + "/start?token=" + userAuthenticationWrapper1.getUserToken(), null, Void.class);
-        Game testerResponse = template.getForObject(base + "games/" + gameId1_2, Game.class);
+        GameDTO testerResponse = template.getForObject(base + "games/" + gameId1_2, GameDTO.class);
         gameId = testerResponse.getId();
     }
 
     @Test
     public void processResponse_DrawCardIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         PlayerDeck<HandCard> hiddenDeck = (PlayerDeck<HandCard>)deckRepo.findOne(user.getHiddenDeck().getId());
@@ -167,7 +164,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_DrawCardIsCorrectWhenEmpty(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         PlayerDeck<HandCard> hiddenDeck = (PlayerDeck<HandCard>)deckRepo.findOne(user.getHiddenDeck().getId());
@@ -191,7 +188,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_playCardIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
 
         Hibernate.initialize(game.getUsers());
         User user = userRepo.findOne(game.getUsers().get(0).getId());
@@ -215,7 +212,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_moveIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         WagonLevel wl = wagonLevelRepo.findOne(user.getWagonLevel().getId());
@@ -235,7 +232,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_collectItemIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         WagonLevel wl = wagonLevelRepo.findOne(user.getWagonLevel().getId());
@@ -259,7 +256,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_PunchIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         User victim = userRepo.findOne(game.getUsers().get(1).getId());
@@ -292,7 +289,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_ShootIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         User victim = userRepo.findOne(game.getUsers().get(1).getId());
@@ -321,7 +318,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_MoveMarshalIsCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
@@ -346,7 +343,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void changeLevel_isCorrect(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
 
         WagonLevel wl = wagonLevelRepo.findOne(user.getWagonLevel().getId());
@@ -365,7 +362,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_Punch_CheyenneCollectsItem(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User cheyenne = userRepo.findOne(game.getUsers().get(0).getId());
         cheyenne.setCharacter(new Cheyenne());
 
@@ -403,7 +400,7 @@ public class ActionResponseServiceTest {
 
     @Test
     public void processResponse_TucoShooter_VictimIsMoved(){
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user = userRepo.findOne(game.getUsers().get(0).getId());
         user.setCharacter(new Tuco());
 

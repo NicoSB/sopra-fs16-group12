@@ -1,5 +1,6 @@
 package ch.uzh.ifi.seal.soprafs16.service;
 
+import ch.uzh.ifi.seal.soprafs16.model.*;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,7 @@ import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
 import ch.uzh.ifi.seal.soprafs16.constant.PhaseType;
 import ch.uzh.ifi.seal.soprafs16.controller.GenericService;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
-import ch.uzh.ifi.seal.soprafs16.model.Item;
-import ch.uzh.ifi.seal.soprafs16.model.Marshal;
-import ch.uzh.ifi.seal.soprafs16.model.User;
-import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.CollectItemRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.DrawOrPlayCardRequestDTO;
@@ -102,7 +99,7 @@ public class GameLogicService extends GenericService {
     private GameCacherService gameCacherService;
 
     public void update(Long id) {
-        Game game = gameRepo.findOne(id);
+        GameDTO game = gameRepo.findOne(id);
         logger.debug("update started");
 
         Hibernate.initialize(game.getUsers());
@@ -124,7 +121,7 @@ public class GameLogicService extends GenericService {
         }
     }
 
-    private void setPhase(Game game) {
+    private void setPhase(GameDTO game) {
         if (game.getCurrentPhase() == PhaseType.EXECUTION && game.getCommonDeck().size() == 0) {
             if (!endRound(game)) game.setCurrentPhase(PhaseType.PLANNING);
         } else if (game.getCurrentPhase() == PhaseType.PLANNING && game.getActionRequestCounter() == calculatePlanningARcounter(game)) {
@@ -134,7 +131,7 @@ public class GameLogicService extends GenericService {
         gameCacherService.saveGame(game);
     }
 
-    private void processCommonDeck(Game game) {
+    private void processCommonDeck(GameDTO game) {
         System.out.println("processCommonDeck");
         GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>) deckRepo.findOne(game.getCommonDeck().getId());
         // If no cards were played that round (highly unlikely)
@@ -172,7 +169,7 @@ public class GameLogicService extends GenericService {
         gameCacherService.saveGame(game);
     }
 
-    private int calculatePlanningARcounter(Game game) {
+    private int calculatePlanningARcounter(GameDTO game) {
         int sum = 0;
         RoundCard r = (RoundCard) game.getRoundCardDeck().get(game.getCurrentRound());
         for (Turn t : r.getPattern()) {
@@ -186,7 +183,7 @@ public class GameLogicService extends GenericService {
         return sum;
     }
 
-    private boolean endRound(Game game) {
+    private boolean endRound(GameDTO game) {
         // Next round is triggered
         game.setCurrentRound(game.getCurrentRound() + 1);
         // Last round is over
@@ -208,7 +205,7 @@ public class GameLogicService extends GenericService {
         }
     }
 
-    private void evaluateGunslingerBonus(Game game) {
+    private void evaluateGunslingerBonus(GameDTO game) {
         List<User> max = new ArrayList<>();
         max.add(game.getUsers().get(0));
 
@@ -236,19 +233,19 @@ public class GameLogicService extends GenericService {
         }
     }
 
-    private void executeRoundAction(Game game) {
+    private void executeRoundAction(GameDTO game) {
         RoundCard rc = (RoundCard) cardRepo.findOne(game.getRoundCardDeck().get(game.getCurrentRound() - 1).getId());
         RoundEndActionHelper reaHelper = new RoundEndActionHelper();
         reaHelper.execute(rc, game.getId());
     }
 
-    private void processPlayerTurn(Game game) {
+    private void processPlayerTurn(GameDTO game) {
         logger.debug("processPlayerTurn");
         createDOPCRequestDTO(game);
         game.setActionRequestCounter(game.getActionRequestCounter() + 1);
     }
 
-    private void setNextTurn(Game game, int playerCounter) {
+    private void setNextTurn(GameDTO game, int playerCounter) {
         logger.debug("setNextTurn");
         // Turn end
         if ((!(game.getCurrentTurnType() instanceof SpeedupTurn) && game.getActionRequestCounter() % playerCounter == 0)
@@ -264,13 +261,13 @@ public class GameLogicService extends GenericService {
         gameCacherService.saveGame(game);
     }
 
-    private void finishGame(Game game) {
+    private void finishGame(GameDTO game) {
         game.setStatus(GameStatus.FINISHED);
         gameRepo.save(game);
         gameCacherService.saveGame(game);
     }
 
-    private void setNextPlayer(Game game, int playerCounter) {
+    private void setNextPlayer(GameDTO game, int playerCounter) {
         Turn t = game.getCurrentTurnType();
         if (!(t instanceof SpeedupTurn) || game.getActionRequestCounter() % 2 == 0) {
             if (t instanceof ReverseTurn) {
@@ -284,7 +281,7 @@ public class GameLogicService extends GenericService {
         gameCacherService.saveGame(game);
     }
 
-    private void createDOPCRequestDTO(Game game) {
+    private void createDOPCRequestDTO(GameDTO game) {
         logger.debug("DOPCrequest created");
         int currentplayer = game.getCurrentPlayer();
         DrawOrPlayCardRequestDTO doprq = new DrawOrPlayCardRequestDTO();
@@ -305,7 +302,7 @@ public class GameLogicService extends GenericService {
         gameCacherService.saveGame(game);
     }
 
-    private void resetPlayerDecks(Game game) {
+    private void resetPlayerDecks(GameDTO game) {
         Hibernate.initialize(game.getUsers());
         List<User> users = game.getUsers();
         for (User u : users) {
@@ -376,12 +373,12 @@ public class GameLogicService extends GenericService {
                 execute((PivotablePoleCard) rc, gameId);
             }
 
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             gameCacherService.saveGame(game);
         }
 
         private void execute(AngryMarshalCard amc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
             WagonLevel wl = wagonLevelRepo.findOne(marshal.getWagonLevel().getId());
             WagonLevel wlTop = wagonLevelRepo.findOne(wl.getWagon().getTopLevel().getId());
@@ -416,7 +413,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(BrakingCard bc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             for (User u : game.getUsers()) {
                 User user = userRepo.findOne(u.getId());
                 if (user.getWagonLevel().getLevelType() == LevelType.TOP
@@ -436,7 +433,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(GetItAllCard giac, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             Marshal marshal = game.getMarshal();
             WagonLevel wl = wagonLevelRepo.findOne(marshal.getWagonLevel().getId());
 
@@ -453,7 +450,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(HostageCard hc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             WagonLevel locTop = wagonLevelRepo.findOne(game.getWagons().get(0).getTopLevel().getId());
             WagonLevel locBottom = wagonLevelRepo.findOne(game.getWagons().get(0).getBottomLevel().getId());
 
@@ -483,7 +480,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(MarshallsRevengeCard mrc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             WagonLevel wl = wagonLevelRepo.findOne(game.getMarshal().getWagonLevel().getWagon().getTopLevel().getId());
 
             for (User u : wl.getUsers()) {
@@ -505,7 +502,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(PassengerRebellionCard prc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             for (User u : game.getUsers()) {
                 if (u.getWagonLevel().getLevelType() == LevelType.BOTTOM) {
                     if (game.getNeutralBulletsDeck().size() > 0) {
@@ -526,7 +523,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(PickPocketingCard ppc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
 
             for (User u : game.getUsers()) {
                 if (u.getWagonLevel().getUsers().size() == 1) {
@@ -550,7 +547,7 @@ public class GameLogicService extends GenericService {
         }
 
         private void execute(PivotablePoleCard ppc, Long gameId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             // Get top wagonlevel of caboose
             WagonLevel caboose = wagonLevelRepo.findOne(game.getWagons().get(game.getWagons().size() - 1).getTopLevel().getId());
             for (User u : game.getUsers()) {
@@ -631,7 +628,7 @@ public class GameLogicService extends GenericService {
         }
 
         public ShootRequestDTO generateShootRequest(Long gameId, Long userId) {
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             User user = userRepo.findOne(userId);
             ShootRequestDTO srq = new ShootRequestDTO();
             List<User> userList = new ArrayList<User>();
@@ -727,7 +724,7 @@ public class GameLogicService extends GenericService {
         //region collectRequest
         public CollectItemRequestDTO generateCollectRequest(Long gameId, Long userId) {
             System.out.println("collectRequest");
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             User user = userRepo.findOne(userId);
             CollectItemRequestDTO crq = new CollectItemRequestDTO();
             crq.setHasBag(Boolean.FALSE);
@@ -766,7 +763,7 @@ public class GameLogicService extends GenericService {
         public MoveRequestDTO generateMoveRequest(Long gameId, Long userId) {
             System.out.println("moveRequest");
             User user = userRepo.findOne(userId);
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             MoveRequestDTO mrq = new MoveRequestDTO();
             List<Long> movable = new ArrayList<>();
             mrq.setMovableWagonsLvlIds(new ArrayList<>());
@@ -827,7 +824,7 @@ public class GameLogicService extends GenericService {
         public PunchRequestDTO generatePunchRequest(Long gameId, Long userId) {
             System.out.println("punchRequest");
             User user = userRepo.findOne(userId);
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
 
             PunchRequestDTO prq = new PunchRequestDTO();
             List<User> userList = new ArrayList<>();
@@ -898,7 +895,7 @@ public class GameLogicService extends GenericService {
 
         public MoveMarshalRequestDTO generateMoveMarshalRequest(Long gameId, Long userId) {
             System.out.println("moveMarshalRequest");
-            Game game = gameRepo.findOne(gameId);
+            GameDTO game = gameRepo.findOne(gameId);
             MoveMarshalRequestDTO mmrq = new MoveMarshalRequestDTO();
 
             if (game.getMarshal().getWagonLevel().getWagonLevelBefore() != null) {

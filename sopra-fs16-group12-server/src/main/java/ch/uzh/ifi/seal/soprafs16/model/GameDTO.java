@@ -23,7 +23,7 @@ import ch.uzh.ifi.seal.soprafs16.model.cards.roundCards.RoundCard;
 import ch.uzh.ifi.seal.soprafs16.model.turns.Turn;
 
 @Entity
-public class Game implements Serializable {
+public class GameDTO implements Serializable {
 
     /**
      *

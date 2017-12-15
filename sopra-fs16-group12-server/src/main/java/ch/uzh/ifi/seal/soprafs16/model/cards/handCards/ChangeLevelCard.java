@@ -6,10 +6,6 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.seal.soprafs16.model.Game;
-import ch.uzh.ifi.seal.soprafs16.model.User;
-import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
-
 @Entity
 @JsonTypeName("changeLevelCard")
 public class ChangeLevelCard extends ActionCard implements Serializable {

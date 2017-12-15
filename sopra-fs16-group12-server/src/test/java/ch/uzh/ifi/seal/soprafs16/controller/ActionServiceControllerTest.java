@@ -1,6 +1,7 @@
 package ch.uzh.ifi.seal.soprafs16.controller;
 
 
+import ch.uzh.ifi.seal.soprafs16.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,12 +22,7 @@ import ch.uzh.ifi.seal.soprafs16.Application;
 import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
 import ch.uzh.ifi.seal.soprafs16.constant.UserStatus;
-import ch.uzh.ifi.seal.soprafs16.model.Game;
-import ch.uzh.ifi.seal.soprafs16.model.Item;
-import ch.uzh.ifi.seal.soprafs16.model.Marshal;
-import ch.uzh.ifi.seal.soprafs16.model.User;
-import ch.uzh.ifi.seal.soprafs16.model.Wagon;
-import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
+import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.CollectItemRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.MoveMarshalRequestDTO;
@@ -120,7 +116,7 @@ public class ActionServiceControllerTest {
         userRepo.save(user1);
 //        String token1 = template.postForObject(base + "users", user1, String.class);
 //
-        Game game1 = new Game();
+        GameDTO game1 = new GameDTO();
         game1.setName("game1");
         game1.setOwner("user1");
         game1.setUsers(new ArrayList<User>());
@@ -131,7 +127,7 @@ public class ActionServiceControllerTest {
         gameId = game1.getId();
 //        Long gameId1 = template.postForObject(base + "games?token=" + token1, game1, Long.class);
 //        template.postForObject(base + "games/" + gameId1 + "/start?token=" + token1, null, Void.class);
-//        Game testerResponse = template.getForObject(base + "games/" + gameId1, Game.class);
+//        GameDTO testerResponse = template.getForObject(base + "games/" + gameId1, GameDTO.class);
 //        gameId = testerResponse.getId();
 //region useless shit
 //        User someUser = new User();
@@ -499,7 +495,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_CollectItemIsCorrect() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(5).getId());
         User user2 = userRepo.findOne(game.getUsers().get(6).getId());
 
@@ -520,7 +516,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_ShootRequestIsCorrect_Roof() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(9).getId());
 
         ShootCard sc = new ShootCard();
@@ -535,7 +531,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_ShootRequestIsCorrect_Bottom() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(4).getId());
 
         ShootCard sc = new ShootCard();
@@ -552,7 +548,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_ShootableIsCorrect_Django_Roof() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(3).getId());
 
         ShootCard sc = new ShootCard();
@@ -566,7 +562,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_ShootableIsCorrect_Django_Bottom() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(2).getId());
 
         ShootCard sc = new ShootCard();
@@ -580,7 +576,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_MovableIsCorrect_Roof() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(3).getId());
 
         MoveCard mc = new MoveCard();
@@ -595,7 +591,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_MovableIsCorrect_Bottom() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(2).getId());
 
         MoveCard mc = new MoveCard();
@@ -610,7 +606,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_PunchableIsCorrect() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(4).getId());
 
         PunchCard pc = new PunchCard();
@@ -625,7 +621,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_PunchableIsCorrect_Belle() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         User user1 = userRepo.findOne(game.getUsers().get(7).getId());
 
         PunchCard pc = new PunchCard();
@@ -641,7 +637,7 @@ public class ActionServiceControllerTest {
 
     @Test
     public void processRequest_MarshalIsCorrect() {
-        Game game = gameRepo.findOne(gameId);
+        GameDTO game = gameRepo.findOne(gameId);
         Marshal marshal = marshalRepo.findOne(game.getMarshal().getId());
 
         MarshalCard mc = new MarshalCard();

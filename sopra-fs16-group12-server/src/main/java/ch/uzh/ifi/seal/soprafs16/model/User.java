@@ -42,7 +42,7 @@ public class User implements Serializable {
 
     @ManyToOne
     @JsonIgnore
-    private Game game;
+    private GameDTO game;
 
     @ManyToOne
     @JsonIgnore
@@ -87,11 +87,11 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public Game getGame() {
+    public GameDTO getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GameDTO game) {
         this.game = game;
     }
 
