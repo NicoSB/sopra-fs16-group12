@@ -1,5 +1,7 @@
 package ch.uzh.ifi.seal.soprafs16.model.action;
 
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.Actions.Action;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -8,13 +10,13 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.CollectItemResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.DrawCardResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.MoveMarshalResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.MoveResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.PlayCardResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.PunchResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ShootResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.CollectItemResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.DrawCardResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.MoveMarshalResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.MoveResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.PlayCardResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.PunchResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.ShootResponseDTO;
 
 
 /**
@@ -32,7 +34,7 @@ import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ShootResponseDTO;
         @JsonSubTypes.Type(value = DrawCardResponseDTO.class, name = "drawCardResponseDTO"),
         @JsonSubTypes.Type(value = PlayCardResponseDTO.class, name = "playCardResponseDTO")
 })
-public class ActionResponseDTO extends ActionDTO implements Serializable {
+public abstract class ActionResponseDTO extends ActionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 }

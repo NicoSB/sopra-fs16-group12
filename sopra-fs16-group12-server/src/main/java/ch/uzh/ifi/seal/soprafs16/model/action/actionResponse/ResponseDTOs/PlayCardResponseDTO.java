@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.soprafs16.model.action.actionResponse;
+package ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 

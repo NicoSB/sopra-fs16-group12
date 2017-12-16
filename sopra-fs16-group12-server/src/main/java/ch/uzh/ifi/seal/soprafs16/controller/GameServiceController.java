@@ -289,13 +289,9 @@ public class GameServiceController extends GenericService {
             }
             if (actionResponseDTO != null) {
                 actionResponseDTO = actionResponseRepo.save(actionResponseDTO);
-                if (actionResponseService.processResponse(actionResponseDTO)) {
-                    gameLogicService.update(gameId);
-                    return gameId;
-                } else {
-                    logger.error("Can't draw cards");
-                    return (long) -1;
-                }
+                actionResponseService.processResponse(actionResponseDTO);
+                gameLogicService.update(gameId);
+                return gameId;
             } else {
                 logger.error("Actionresponse is null");
                 return (long) -1;

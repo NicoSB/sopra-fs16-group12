@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.soprafs16.model.action.actionResponse;
+package ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -9,11 +9,11 @@ import javax.persistence.Entity;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionResponseDTO;
 
 /**
- * Created by Nico on 22.04.2016.
+ * Created by Timon Willi on 17.04.2016.
  */
 @Entity
-@JsonTypeName("moveMarshalResponseDTO")
-public class MoveMarshalResponseDTO extends ActionResponseDTO implements Serializable{
+@JsonTypeName("moveResponseDTO")
+public class MoveResponseDTO extends ActionResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

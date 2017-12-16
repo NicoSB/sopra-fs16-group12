@@ -27,7 +27,7 @@ import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
 import ch.uzh.ifi.seal.soprafs16.constant.PhaseType;
 import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.PlayCardResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.PlayCardResponseDTO;
 import ch.uzh.ifi.seal.soprafs16.model.cards.GameDeck;
 import ch.uzh.ifi.seal.soprafs16.model.cards.PlayerDeck;
 import ch.uzh.ifi.seal.soprafs16.model.cards.handCards.ActionCard;
@@ -385,7 +385,7 @@ public class GameLogicServiceTest {
             assertEquals(2, (long) tester.getCurrentTurn());
 
 
-            // 4 Responses for Normal-Turn
+            // 4 ResponseDTOs for Normal-Turn
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
             assertEquals(2, (long) tester.getCurrentTurn());

@@ -37,7 +37,6 @@ import ch.uzh.ifi.seal.soprafs16.model.turns.Turn;
 @Service("gameService")
 public class GameService {
 
-    //region Repositories
     @Autowired
     private UserRepository userRepo;
     @Autowired
@@ -58,7 +57,7 @@ public class GameService {
     private DeckRepository deckRepo;
     @Autowired
     private TurnRepository turnRepo;
-    //endregion
+
     @Autowired
     private GameCacherService gameCacherService;
 
