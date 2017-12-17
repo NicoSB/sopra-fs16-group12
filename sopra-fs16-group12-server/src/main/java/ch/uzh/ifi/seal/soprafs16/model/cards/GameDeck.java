@@ -32,4 +32,8 @@ public class GameDeck<T extends Card>  extends Deck implements Serializable {
     public void setGame(GameDTO game) {
         this.game = game;
     }
+
+    public boolean isEmpty() {
+        return getCards().isEmpty();
+    }
 }

@@ -196,7 +196,7 @@ public class GameServiceControllerTest {
         //region Assertions
         //is the the current player (startplayer) placed in the last wagon
         WagonLevel lastWagonLevel = game1_2Response.getWagons().get((game1_2Response.getWagons().size() - 1)).getBottomLevel();
-        //Assert.assertTrue(containsUserId(lastWagonLevel.getUsers(), game1_2Response.getUsers().get(game1_2Response.getCurrentPlayer()).getId()));
+        //Assert.assertTrue(containsUserId(lastWagonLevel.getUsers(), game1_2Response.getUsers().get(game1_2Response.getCurrentPlayerIndex()).getId()));
         for (User u : game1_2Response.getUsers()) {
             //does every Player have a 250$ bag
             Assert.assertEquals(250, u.getItems().get(0).getValue());

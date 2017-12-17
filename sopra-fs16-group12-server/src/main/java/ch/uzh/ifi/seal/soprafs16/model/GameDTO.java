@@ -44,7 +44,7 @@ public class GameDTO implements Serializable {
     private GameStatus status;
 
     @Column
-    private Integer currentPlayer;
+    private Integer currentPlayerIndex;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)//, fetch = FetchType.EAGER)
     private List<User> users;
@@ -129,12 +129,12 @@ public class GameDTO implements Serializable {
         this.status = status;
     }
 
-    public Integer getCurrentPlayer() {
-        return currentPlayer;
+    public Integer getCurrentPlayerIndex() {
+        return currentPlayerIndex;
     }
 
-    public void setCurrentPlayer(Integer currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public void setCurrentPlayerIndex(Integer currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
     public List<Wagon> getWagons() {

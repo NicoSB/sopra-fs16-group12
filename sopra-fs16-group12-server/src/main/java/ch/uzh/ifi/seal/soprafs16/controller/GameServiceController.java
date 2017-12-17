@@ -139,8 +139,8 @@ public class GameServiceController extends GenericService {
 
         if (owner != null && game != null && game.getOwner().equals(owner.getName()) && game.getStatus() != GameStatus.RUNNING) {
 
-            long returnId = gameService.startGame(gameId);
-            gameLogicService.update(gameId);
+            gameService.startGame(gameId);
+            gameLogicService.updateGame(gameId);
         }
     }
 
@@ -155,7 +155,7 @@ public class GameServiceController extends GenericService {
 
         if (owner != null && game != null && game.getOwner().equals(owner.getName()) && game.getStatus() != GameStatus.RUNNING) {
             gameService.startDemoGame(gameId);
-            gameLogicService.update(gameId);
+            gameLogicService.updateGame(gameId);
         }
     }
 
@@ -283,14 +283,14 @@ public class GameServiceController extends GenericService {
     public Long processResponse(@PathVariable Long gameId, @RequestParam("token") String userToken, @RequestBody ActionResponseDTO actionResponseDTO) {
         try {
             GameDTO game = gameRepo.findOne(gameId);
-            if (!userToken.equals(game.getUsers().get(game.getCurrentPlayer()).getToken())) {
+            if (!userToken.equals(game.getUsers().get(game.getCurrentPlayerIndex()).getToken())) {
                 logger.error("Authentication error with token: " + userToken);
                 return (long) -1;
             }
             if (actionResponseDTO != null) {
                 actionResponseDTO = actionResponseRepo.save(actionResponseDTO);
                 actionResponseService.processResponse(actionResponseDTO);
-                gameLogicService.update(gameId);
+                gameLogicService.updateGame(gameId);
                 return gameId;
             } else {
                 logger.error("Actionresponse is null");

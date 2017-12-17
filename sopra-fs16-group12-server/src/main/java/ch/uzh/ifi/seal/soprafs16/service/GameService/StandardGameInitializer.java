@@ -314,7 +314,7 @@ public class StandardGameInitializer extends GameInitializer {
         //set Random 1st Player
         Random rn = new Random();
         int firstPlayer = rn.nextInt(game.getUsers().size());
-        game.setCurrentPlayer(firstPlayer);
+        game.setCurrentPlayerIndex(firstPlayer);
 
         //place odd-number-players in last waggon, even-number-players in second-last
         WagonLevel lastWagonLevelBot = game.getWagons().get(game.getWagons().size() - 1).getBottomLevel();
@@ -430,7 +430,7 @@ public class StandardGameInitializer extends GameInitializer {
         game.setCurrentRound(0);
         game.setCurrentTurn(0);
         game.setCurrentPhase(PhaseType.PLANNING);
-        game.setRoundStarter(game.getCurrentPlayer());
+        game.setRoundStarter(game.getCurrentPlayerIndex());
         game.setActionRequestCounter(0);
         game.setRoundPattern(((RoundCard) (game.getRoundCardDeck().getCards().get(0))).getStringPattern());
 

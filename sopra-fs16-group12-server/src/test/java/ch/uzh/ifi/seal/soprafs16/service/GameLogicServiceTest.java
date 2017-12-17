@@ -177,7 +177,7 @@ public class GameLogicServiceTest {
         gameRepo.save(tester);
 //        gameCacherService.saveGame(tester);
 
-        tester.setCurrentPlayer(0);
+        tester.setCurrentPlayerIndex(0);
         tester.setRoundStarter(0);
         GameDeck<ActionCard> roundCardDeck = (GameDeck<ActionCard>) deckRepo.findOne(tester.getRoundCardDeck().getId());
         Hibernate.initialize(roundCardDeck.getCards());
@@ -253,56 +253,56 @@ public class GameLogicServiceTest {
         //for (int i = 0; i < 5; i++) {
             // 4 responses for Normal Turn
             tester = gameRepo.findOne(gameId);
-            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayerIndex());
 
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayerIndex());
 
             // 8 responses for Speed-Up-Turn
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
             // eighth response triggers turn change
-            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((0 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((3 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((2 + i) % 4, (long) tester.getCurrentPlayerIndex());
             simulatePlayCardResponse();
             tester = gameRepo.findOne(gameId);
-            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayer());
+            assertEquals((1 + i) % 4, (long) tester.getCurrentPlayerIndex());
             tester = gameRepo.findOne(gameId);
             simulatePlayCardResponse();
 
@@ -310,22 +310,22 @@ public class GameLogicServiceTest {
             GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(game.getCommonDeck().getId());
 
             while(!commonDeck.getCards().isEmpty()){
-                gls.update(tester.getId());
+                gls.updateGame(tester.getId());
                 commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(commonDeck.getId());
             }
 
-            gls.update(tester.getId());
+            gls.updateGame(tester.getId());
         //}
     }
 
     private void simulatePlayCardResponse() {
-        User user = userRepo.findOne(tester.getUsers().get(tester.getCurrentPlayer()).getId());
+        User user = userRepo.findOne(tester.getUsers().get(tester.getCurrentPlayerIndex()).getId());
         PlayCardResponseDTO pc = new PlayCardResponseDTO();
         pc.setSpielId(tester.getId());
         pc.setUserId(user.getId());
         pc.setPlayedCardId(user.getHandDeck().get(0).getId());
         ars.processResponse(pc);
-        gls.update(tester.getId());
+        gls.updateGame(tester.getId());
     }
 
     @Test
@@ -402,10 +402,10 @@ public class GameLogicServiceTest {
             GameDeck<ActionCard> commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(game.getCommonDeck().getId());
 
             while(!commonDeck.getCards().isEmpty()){
-                gls.update(tester.getId());
+                gls.updateGame(tester.getId());
                 commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(commonDeck.getId());
             }
-            gls.update(tester.getId());
+            gls.updateGame(tester.getId());
      //   }
     }
 
@@ -439,11 +439,11 @@ public class GameLogicServiceTest {
         while(!commonDeck.getCards().isEmpty()){
             tester = gameRepo.findOne(gameId);
             assertEquals(y, (long) tester.getCurrentRound());
-            gls.update(tester.getId());
+            gls.updateGame(tester.getId());
             commonDeck = (GameDeck<ActionCard>)deckRepo.findOne(commonDeck.getId());
         }
-        gls.update(tester.getId());
-        // last update call for ActionCard - Actions
+        gls.updateGame(tester.getId());
+        // last updateGame call for ActionCard - Actions
     }
 
     @Test
@@ -489,14 +489,14 @@ public class GameLogicServiceTest {
         wagonLevelRepo.save(newWl);
         userRepo.save(u);
         game = gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         BulletCard bc = (BulletCard) cardRepo.findOne(game.getNeutralBulletsDeck().get(0).getId());
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u = userRepo.findOne(u.getId());
@@ -546,13 +546,13 @@ public class GameLogicServiceTest {
         newWl = wagonLevelRepo.save(newWl);
         userRepo.save(u);
         game = gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u = userRepo.findOne(u.getId());
@@ -604,13 +604,13 @@ public class GameLogicServiceTest {
         newWl = wagonLevelRepo.save(newWl);
         marshalRepo.save(marshal);
         gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         newWl = wagonLevelRepo.findOne(newWl.getId());
@@ -670,13 +670,13 @@ public class GameLogicServiceTest {
 
 
         gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u1 = userRepo.findOne(u1.getId());
@@ -728,7 +728,7 @@ public class GameLogicServiceTest {
         u.setWagonLevel(newWl);
         newWl = wagonLevelRepo.save(newWl);
         game = gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         Item item = itemRepo.findOne(getMinPurse(u).getId());
 
@@ -736,7 +736,7 @@ public class GameLogicServiceTest {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u = userRepo.findOne(u.getId());
@@ -784,14 +784,14 @@ public class GameLogicServiceTest {
         BulletCard bc3 = (BulletCard) cardRepo.findOne(game.getNeutralBulletsDeck().get(3).getId());
 
         BulletCard[] bcs = {bc0, bc1, bc2, bc3};
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         game = gameRepo.findOne(gameId);
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 15; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         int i = 0;
@@ -851,13 +851,13 @@ public class GameLogicServiceTest {
 
         boolean wagonContainedBag = containsBag(newWl.getItems());
         game = gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         for (int i = 0; i < 16; i++) {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u = userRepo.findOne(u.getId());
@@ -920,7 +920,7 @@ public class GameLogicServiceTest {
         u.setWagonLevel(newWl);
         newWl = wagonLevelRepo.save(newWl);
         game = gameRepo.findOne(game.getId());
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         Item item = itemRepo.findOne(getMinPurse(u).getId());
 
@@ -928,7 +928,7 @@ public class GameLogicServiceTest {
             simulatePlayCardResponse();
         }
         for (int i = 0; i < 16; i++) {
-            gls.update(gameId);
+            gls.updateGame(gameId);
         }
 
         u = userRepo.findOne(u.getId());
@@ -996,7 +996,7 @@ public class GameLogicServiceTest {
         userRepo.save(gunslinger);
 
         int items = gunslinger.getItems().size();
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         gunslinger = userRepo.findOne(gunslinger.getId());
         assertEquals(items + 1, gunslinger.getItems().size());
@@ -1016,7 +1016,7 @@ public class GameLogicServiceTest {
         User notGunslinger = userRepo.findOne(game.getUsers().get(1).getId());
         int items = notGunslinger.getItems().size();
 
-        gls.update(gameId);
+        gls.updateGame(gameId);
         notGunslinger = userRepo.findOne(notGunslinger.getId());
 
         assertEquals(items, notGunslinger.getItems().size());
@@ -1038,7 +1038,7 @@ public class GameLogicServiceTest {
         userRepo.save(gunslinger2);
         int items2 = gunslinger1.getItems().size();
 
-        gls.update(gameId);
+        gls.updateGame(gameId);
 
         gunslinger1 = userRepo.findOne(gunslinger1.getId());
         gunslinger2 = userRepo.findOne(gunslinger1.getId());
@@ -1066,7 +1066,7 @@ public class GameLogicServiceTest {
 
     private void simulateTurn(GameDTO game) {
         for (int i = 0; i < game.getUsers().size(); i++) {
-            gls.update(game.getId());
+            gls.updateGame(game.getId());
         }
     }
 
