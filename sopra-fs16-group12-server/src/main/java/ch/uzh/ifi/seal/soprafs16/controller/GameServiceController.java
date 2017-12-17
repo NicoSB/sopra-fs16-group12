@@ -31,10 +31,10 @@ import ch.uzh.ifi.seal.soprafs16.model.repositories.TurnRepository;
 import ch.uzh.ifi.seal.soprafs16.model.repositories.UserRepository;
 import ch.uzh.ifi.seal.soprafs16.model.repositories.WagonLevelRepository;
 import ch.uzh.ifi.seal.soprafs16.model.repositories.WagonRepository;
-import ch.uzh.ifi.seal.soprafs16.service.ActionResponseService;
+import ch.uzh.ifi.seal.soprafs16.service.actionresponseservice.ActionResponseService;
 import ch.uzh.ifi.seal.soprafs16.service.GameCacherService;
 import ch.uzh.ifi.seal.soprafs16.service.GameLogicService;
-import ch.uzh.ifi.seal.soprafs16.service.GameService.GameService;
+import ch.uzh.ifi.seal.soprafs16.service.gameservice.GameService;
 
 @RestController
 public class GameServiceController extends GenericService {

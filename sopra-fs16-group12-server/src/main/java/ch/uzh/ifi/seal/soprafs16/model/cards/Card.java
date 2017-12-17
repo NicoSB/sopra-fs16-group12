@@ -41,6 +41,10 @@ public class Card implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Deck getDeck() {
         return deck;
     }

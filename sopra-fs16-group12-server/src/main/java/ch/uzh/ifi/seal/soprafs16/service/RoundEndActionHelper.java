@@ -10,6 +10,7 @@ import ch.uzh.ifi.seal.soprafs16.model.cards.handCards.BulletCard;
 import ch.uzh.ifi.seal.soprafs16.model.cards.handCards.HandCard;
 import ch.uzh.ifi.seal.soprafs16.model.cards.roundCards.*;
 import ch.uzh.ifi.seal.soprafs16.model.repositories.*;
+import ch.uzh.ifi.seal.soprafs16.service.actionresponseservice.ActionResponseService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -89,9 +90,9 @@ class RoundEndActionHelper {
             marshal.setWagonLevel(wlAfter);
             wlAfter.setMarshal(marshal);
 
-            actionResponseService.checkMarshal(game);
+            actionResponseService.executeMarshalRule(game);
             marshalRepo.save(marshal);
-            actionResponseService.checkMarshal(game);
+            actionResponseService.executeMarshalRule(game);
             wagonLevelRepo.save(wl);
             wagonLevelRepo.save(wlAfter);
         }

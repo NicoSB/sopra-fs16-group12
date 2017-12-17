@@ -11,12 +11,12 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.CollectItemRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.DrawOrPlayCardRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.MoveMarshalRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.MoveRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.PunchRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.ShootRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.CollectItemRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.DrawOrPlayCardRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.MoveMarshalRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.MoveRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.PunchRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.ShootRequestDTO;
 
 /**
  * Created by Timon Willi on 17.04.2016.

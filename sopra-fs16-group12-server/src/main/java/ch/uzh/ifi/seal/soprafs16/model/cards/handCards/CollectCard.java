@@ -4,7 +4,7 @@ import ch.uzh.ifi.seal.soprafs16.constant.ItemType;
 import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.User;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.CollectItemRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.CollectItemRequestDTO;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.io.Serializable;

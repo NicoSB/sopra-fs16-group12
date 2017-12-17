@@ -3,7 +3,7 @@ package ch.uzh.ifi.seal.soprafs16.model.cards.handCards;
 import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.User;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.PunchRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.PunchRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.characters.Belle;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 

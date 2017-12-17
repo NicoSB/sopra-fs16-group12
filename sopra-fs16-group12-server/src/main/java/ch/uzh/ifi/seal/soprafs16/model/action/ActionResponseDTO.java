@@ -1,7 +1,5 @@
 package ch.uzh.ifi.seal.soprafs16.model.action;
 
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.Actions.Action;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -10,13 +8,13 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.CollectItemResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.DrawCardResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.MoveMarshalResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.MoveResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.PlayCardResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.PunchResponseDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionResponse.ResponseDTOs.ShootResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.CollectItemResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.DrawCardResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.MoveMarshalResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.MoveResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.PlayCardResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.PunchResponseDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.response.dtos.ShootResponseDTO;
 
 
 /**

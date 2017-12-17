@@ -5,7 +5,7 @@ import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.User;
 import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.MoveRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.MoveRequestDTO;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.io.Serializable;

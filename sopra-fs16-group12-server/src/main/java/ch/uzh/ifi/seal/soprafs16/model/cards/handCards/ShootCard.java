@@ -4,7 +4,7 @@ import ch.uzh.ifi.seal.soprafs16.constant.LevelType;
 import ch.uzh.ifi.seal.soprafs16.model.GameDTO;
 import ch.uzh.ifi.seal.soprafs16.model.WagonLevel;
 import ch.uzh.ifi.seal.soprafs16.model.action.ActionRequestDTO;
-import ch.uzh.ifi.seal.soprafs16.model.action.actionRequest.ShootRequestDTO;
+import ch.uzh.ifi.seal.soprafs16.model.action.request.ShootRequestDTO;
 import ch.uzh.ifi.seal.soprafs16.model.characters.Belle;
 import ch.uzh.ifi.seal.soprafs16.model.characters.Django;
 import com.fasterxml.jackson.annotation.JsonTypeName;

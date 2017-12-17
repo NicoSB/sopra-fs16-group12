@@ -1,4 +1,4 @@
-package ch.uzh.ifi.seal.soprafs16.service.GameService;
+package ch.uzh.ifi.seal.soprafs16.service.gameservice;
 
 import ch.uzh.ifi.seal.soprafs16.model.*;
 import ch.uzh.ifi.seal.soprafs16.service.GameCacherService;
