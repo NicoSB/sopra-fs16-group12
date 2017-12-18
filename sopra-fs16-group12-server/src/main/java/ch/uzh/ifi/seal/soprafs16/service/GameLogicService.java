@@ -50,11 +50,7 @@ public class GameLogicService extends GenericService {
     @Autowired
     private GameRepository gameRepo;
     @Autowired
-    private WagonLevelRepository wagonLevelRepo;
-    @Autowired
     private ItemRepository itemRepo;
-    @Autowired
-    private MarshalRepository marshalRepo;
     @Autowired
     private CardRepository cardRepo;
     @Autowired
@@ -84,14 +80,7 @@ public class GameLogicService extends GenericService {
 
     private void setNextPhase(GameDTO game) {
         if (isExecutionPhaseOver(game)) {
-            game.setCurrentRound(game.getCurrentRound() + 1);
-
-            if (isGameOver(game)) {
-                finishGame(game);
-            } else {
-                game.setCurrentPhase(PhaseType.PLANNING);
-                endRound(game);
-            }
+            finishRoundOrGame(game);
         } else if (isPlanningPhaseOver(game)) {
             game.setCurrentPhase(PhaseType.EXECUTION);
         }
@@ -102,6 +91,17 @@ public class GameLogicService extends GenericService {
 
     private boolean isExecutionPhaseOver(GameDTO game) {
         return game.getCurrentPhase() == PhaseType.EXECUTION && game.getCommonDeck().size() == 0;
+    }
+
+    private void finishRoundOrGame(GameDTO game) {
+        game.setCurrentRound(game.getCurrentRound() + 1);
+
+        if (isGameOver(game)) {
+            finishGame(game);
+        } else {
+            game.setCurrentPhase(PhaseType.PLANNING);
+            finishRound(game);
+        }
     }
 
     private boolean isGameOver(GameDTO game) {
@@ -159,7 +159,7 @@ public class GameLogicService extends GenericService {
         }
     }
 
-    private void endRound(GameDTO game) {
+    private void finishRound(GameDTO game) {
         System.out.println("round " + game.getCurrentRound() + " end");
 
         executeRoundEndAction(game);
@@ -199,6 +199,7 @@ public class GameLogicService extends GenericService {
             resetHandDeck(u);
         }
     }
+
     private void resetHandDeck(User u) {
         u = userRepo.findOne(u.getId());
         PlayerDeck<HandCard> handDeck = (PlayerDeck<HandCard>) deckRepo.findOne(u.getHandDeck().getId());
@@ -285,7 +286,7 @@ public class GameLogicService extends GenericService {
         Turn t = game.getCurrentTurnType();
 
         if (isNextPlayersTurn(game, t)) {
-            int step = (t instanceof ReverseTurn) ? - 1 : 1;
+            int step = (t instanceof ReverseTurn) ? -1 : 1;
             game.setCurrentPlayerIndex(calculatePositiveRemainder(game.getCurrentPlayerIndex() + step, playerCounter));
         }
 
